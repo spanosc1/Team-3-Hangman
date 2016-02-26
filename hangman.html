@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>hangman</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+	<div class="jumbotron">
+	  <h1>Hangman</h1>
+	  <p>Group 3</p>
+	</div>
+	<div class="row">
+		<div class="col-md-1">
+		</div>
+		<div class="col-md-2" id="word">
+		</div>
+		<div class="col-md-2" id="guesses">
+		</div>
+		<div class="col-md-2" id="remaining">
+		</div>
+		<div class="col-md-2" id="wins">
+		</div>
+		<div class="col-md-2" id="losses">
+		</div>
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+
+var words = ["maike", "raghav", "anthony", "chris"];
+var underscore = [];
+var displayWord = "";
+var wins = 0;
+var guesses = [];
+var guessesLeft = 5;
+var losses = 0;
+var found = false;
+var alreadyGuessed = false;
+var computerWord = words[Math.floor(Math.random() * words.length)];
+
+console.log(computerWord);
+$("#wins").html("Wins: " + wins);
+$("#losses").html("Losses: " + losses);
+for(i=0; i<computerWord.length;i++){
+	underscore[i] = "_";
+}
+
+console.log(underscore);
+
+function display() {
+	displayWord = "";
+	for(i=0; i<underscore.length;i++) {
+		displayWord+=underscore[i] + " ";
+	}
+	$("#word").html(displayWord);
+	$("#guesses").html("Guesses: " + guesses);
+	$("#remaining").html("Remaining: " + guessesLeft);
+}
+
+display();
+
+console.log(displayWord);
+
+document.onkeyup = function(event) {
+	var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
+
+	
+	for(i = 0; i<guesses.length;i++)
+	{
+		if(userGuess==guesses[i]){
+			alreadyGuessed=true;
+		}
+	}
+	if(!alreadyGuessed){
+	//check guess
+
+	guesses.push(userGuess);
+	console.log(guesses);
+	for(i=0; i<computerWord.length;i++) {
+		if(userGuess == computerWord[i]) {
+			underscore[i] = userGuess;
+			//console.log(computerWord.length);
+			console.log(underscore);
+			found = true;
+			
+		}
+
+	}
+	if(!found){
+		guessesLeft--;
+		console.log(guessesLeft);
+	}
+	display();
+	console.log(displayWord);
+	//console.log(underscore);
+	//check win condition
+	for(i=0; i<underscore.length; i++) {
+		var count = 0;
+		if(underscore[i] == "_") {
+			count++;
+		}
+		
+	}
+	if(count == 0) {
+		wins++;
+		$("#wins").html("Wins: " + wins);
+		computerWord = words[Math.floor(Math.random() * words.length)];
+		underscore = [];
+		displayWord = "";
+		console.log(computerWord);
+
+		for(i=0; i<computerWord.length;i++){
+			underscore[i] = "_";
+		}
+		guessesLeft = 5;
+		guesses = [];
+
+console.log(underscore);
+display();
+	}
+
+	console.log(wins);
+
+	//check loss condition
+	if(guessesLeft == 0) {
+		losses++;
+		$("#losses").html("Losses: " + losses);
+		computerWord = words[Math.floor(Math.random() * words.length)];
+		underscore = [];
+		displayWord = "";
+		console.log(computerWord);
+
+		for(i=0; i<computerWord.length;i++){
+			underscore[i] = "_";
+		}
+		guessesLeft = 5;
+		guesses = [];
+
+console.log(underscore);
+display();
+	}
+	console.log(losses);
+	found = false;
+
+}
+alreadyGuessed=false;
+}
+
+</script>
+
+</body>
+</html>
